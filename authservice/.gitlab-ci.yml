@@ -1,0 +1,48 @@
+variables:
+  DOCKER_REGISTRY: 682423865936.dkr.ecr.eu-central-1.amazonaws.com
+  REGION: eu-central-1
+  AUTH_DB_REGISTRY_NAME: auth_db
+  KEYCLOAK_REGISTRY_NAME: keycloak
+
+
+default:
+  image: docker:latest
+  before_script:
+    - IMAGE_TAG="$CI_COMMIT_SHORT_SHA"
+    - echo "Building image..."
+    - docker build -f Dockerfile.auth_db -t $DOCKER_REGISTRY/$AUTH_DB_REGISTRY_NAME:$IMAGE_TAG .
+    - docker build -f Dockerfile.keycloak -t $DOCKER_REGISTRY/$KEYCLOAK_REGISTRY_NAME:$IMAGE_TAG .
+
+services:
+  - docker:dind
+
+stages:
+  - build_auth_db
+  - build_keycloak
+
+
+build_auth_db:
+  stage: build_auth_db
+  inherit:
+    default: true
+  script:
+    - apk add --no-cache curl jq python3 py3-pip
+    - pip install awscli
+    - aws ecr get-login-password --region "${REGION}"  | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+    - echo "Pushing auth_db image..."
+    - docker push $DOCKER_REGISTRY/$AUTH_DB_REGISTRY_NAME:$IMAGE_TAG
+  only:
+    - prod
+
+build_keycloak:
+  stage: build_keycloak
+  inherit:
+    default: true
+  script:
+    - apk add --no-cache curl jq python3 py3-pip
+    - pip install awscli
+    - aws ecr get-login-password --region "${REGION}"  | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+    - echo "Pushing keycloak image..."
+    - docker push $DOCKER_REGISTRY/$KEYCLOAK_REGISTRY_NAME:$IMAGE_TAG
+  only:
+    - prod

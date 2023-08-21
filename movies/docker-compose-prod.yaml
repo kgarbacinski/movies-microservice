@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  movies:
+    container_name: movies
+    image: movies
+    build: .
+    env_file:
+      - .env
+    networks:
+      - movies_network
+      - db_network
+    environment:
+      - DEBUG=false
+    command: bash -c "python wait_for_postgres.py && alembic upgrade head && gunicorn src.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000"
+
+networks:
+  movies_network:
+    name: movies_network
+  db_network:
+    external: true

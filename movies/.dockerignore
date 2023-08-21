@@ -1,0 +1,15 @@
+.gitlab-ci.yml
+.gitignore
+.pre-commit-config.yaml
+.mypy_cache
+.pytest_cache
+test-results
+deployment
+.idea
+.dockerignore
+.git
+integration-test-results
+unit-test-results
+__pycache__/
+Makefile
+README.md

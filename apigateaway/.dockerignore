@@ -1,0 +1,13 @@
+.gitlab-ci.yml
+.gitignore
+.pre-commit-config.yaml
+.mypy_cache
+.pytest_cache
+test-results
+.idea
+.dockerignore
+.git
+Makefile
+__pycache__/
+Dockerfile
+docker-compose-local.yaml

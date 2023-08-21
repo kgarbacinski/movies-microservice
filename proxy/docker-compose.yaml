@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  nginx_proxy:
+    container_name: nginx_proxy
+    build: .
+    ports:
+      - "8003:80"
+    networks:
+      - nginx_network
+      - movies_network
+
+networks:
+  movies_network:
+    external: true
+  nginx_network:
+    name: nginx_network

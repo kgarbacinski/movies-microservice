@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  apigateway:
+    container_name: apigateway
+    build: .
+    image: apigateway
+    env_file:
+      - .env
+    environment:
+      - DEBUG=false
+    networks:
+      - movies_network
+      - keycloak_network
+    command: ["gunicorn", "src.main:app", " --workers 3", "--worker-class",  "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
+
+networks:
+  apigateway_network:
+    name: apigateway_network
+  movies_network:
+    external: true
+  keycloak_network:
+    external: true

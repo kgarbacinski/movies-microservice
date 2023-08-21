@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  apigateway:
+    container_name: apigateway
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    environment:
+      - DEBUG=true
+    networks:
+      - movies_network
+      - keycloak_network
+    command: ["uvicorn","--host=0.0.0.0", "--port=8000", "src.main:app", "--reload"]
+
+networks:
+  apigateway_network:
+    name: apigateway_network
+  movies_network:
+    external: true
+  keycloak_network:
+    external: true

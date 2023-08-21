@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  auth_db:
+    container_name: auth_db
+    build:
+      context: .
+      dockerfile: Dockerfile.auth_db
+    env_file:
+      - .env
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+    networks:
+      - auth_db_network
+    restart: always
+
+  keycloak:
+    container_name: keycloak
+    build:
+      context: .
+      dockerfile: Dockerfile.keycloak
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - KEYCLOAK_PRODUCTION=false
+    depends_on:
+      - auth_db
+    networks:
+      - auth_db_network
+      - keycloak_network
+
+volumes:
+  postgresql_data:
+    driver: local
+
+networks:
+  keycloak_network:
+    name: keycloak_network
+  auth_db_network:
+    name: auth_db_network

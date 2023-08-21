@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  db:
+    container_name: db
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: db
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      db_network:
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  db_network:
+    name: db_network

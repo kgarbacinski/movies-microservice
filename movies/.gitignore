@@ -1,0 +1,37 @@
+# Distribution / packaging
+.Python
+env/
+venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.DS_Store
+cars.sqlite3
+/tests/test.db
+
+
+.env
+.idea
+__pycache__/
+
+# IDE
+.vscode/
+
+# Test
+test-results/
+.pytest_cache/
+integration-test-results
+unit-test-results
+# Mypy
+.mypy_cache/
